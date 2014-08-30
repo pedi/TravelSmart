@@ -1,6 +1,6 @@
 package com.travelsmart.app;
 
-import android.app.Activity;
+import android.app.ExpandableListActivity;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.Context;
@@ -8,14 +8,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ExpandableListView;
 import android.widget.SearchView;
 
 import java.util.List;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends ExpandableListActivity {
 
     private SearchView mSearchView;
+    private ExpandableListView mExpandableList;
+    private ExpandableSectionAdapter mExpandableListAdapter;
     private final String TAG = "DEBUG";
     final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
         @Override
