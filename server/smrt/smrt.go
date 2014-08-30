@@ -6,9 +6,9 @@ import (
 )
 
 type SMRTReq struct {
-	BusName                string
-	OriginBusStopName      string
-	DestinationBusStopName string
+	BusName                string `json:"BusName"`
+	OriginBusStopName      string `json:"OriginBusStopName"`
+	DestinationBusStopName string `json:"DestinationBusStopName"`
 }
 type SMRTResp struct {
 	NumPassengers []BusStation
@@ -38,7 +38,7 @@ func NewSMRT(_passenger *passenger.Passenger) *SMRT {
 		BusStation{"Ayer Rajah Ind Est", []string{"14", "33", "92", "95", "166", "198", "200"}, make(map[string]int)})
 	route.stations = append(route.stations,
 		BusStation{"Kent Ridge Station", []string{"95"}, make(map[string]int)})
-
+	route.order = make(map[string]int)
 	route.order["opp Buona Vista Station"] = 0
 	route.order["opp Anglo-Chinese Junior College"] = 1
 	route.order["Ayer Rajah Ind Est"] = 2
@@ -58,12 +58,14 @@ func (g *SMRT) ProcessReq(req SMRTReq) SMRTResp {
 	find = false
 	findIdx = 0
 	for index, station := range g.route.stations {
+		fmt.Printf("%v - %v - %v", station.Name, req.OriginBusStopName, station.Name == req.OriginBusStopName)
 		if station.Name == req.OriginBusStopName {
 			find = true
 			findIdx = index
 			break
 		}
 	}
+	fmt.Printf("%v %v\n", find, findIdx)
 	if find {
 		for i := findIdx; i < len(g.route.stations); i++ {
 			g.route.stations[i].BusName2Count = make(map[string]int)

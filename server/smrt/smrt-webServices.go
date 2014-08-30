@@ -2,6 +2,7 @@ package smrt
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/go-martini/martini"
 	"io/ioutil"
 	"net/http"
@@ -37,6 +38,7 @@ func (g *SMRT) WebPost(params martini.Params,
 	if err != nil {
 		return http.StatusBadRequest, "invalid JSON data"
 	}
+	fmt.Printf("smrtReq %s\n", smrtReq)
 	var resp = g.ProcessReq(smrtReq)
 	encodedResp, err := json.Marshal(resp)
 	return http.StatusOK, string(encodedResp)
