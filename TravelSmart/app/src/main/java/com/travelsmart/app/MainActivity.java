@@ -4,21 +4,33 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.Arrays;
 import java.util.List;
 
 
-public class MainActivity extends Activity implements SearchView.OnQueryTextListener {
+public class MainActivity extends Activity {
 
     private SearchView mSearchView;
+    private final String TAG = "DEBUG";
+    final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextChange(String query) {
+            Log.d(TAG, "Inputing = " + query);
+            return false;
+
+        }
+
+        @Override
+        public boolean onQueryTextSubmit(String query) {
+            Log.d(TAG, "Submitted = " + query);
+            return false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +43,6 @@ public class MainActivity extends Activity implements SearchView.OnQueryTextList
         super.onCreateOptionsMenu(menu);
 
         getMenuInflater().inflate(R.menu.search_bar, menu);
-        this.menu = menu;
         MenuItem searchItem = menu.findItem(R.id.search);
         mSearchView = (SearchView) searchItem.getActionView();
         setupSearchView(searchItem);
@@ -64,22 +75,9 @@ public class MainActivity extends Activity implements SearchView.OnQueryTextList
             mSearchView.setSearchableInfo(info);
         }
 
-        mSearchView.setOnQueryTextListener(this);
+        mSearchView.setOnQueryTextListener(queryTextListener);
     }
 
-    @Override
-    public boolean onQueryTextChange(String query) {
-        Toast.makeText(this, "Inputing = " + query, Toast.LENGTH_SHORT );
-        return false;
-
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        Toast.makeText(this, "Submitted = " + query, Toast.LENGTH_SHORT );
-        return false;
-    }
-    
     protected boolean isAlwaysExpanded() {
         return false;
     }
