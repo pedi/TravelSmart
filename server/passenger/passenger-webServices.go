@@ -76,8 +76,8 @@ func (g *Passenger) WebPost(params martini.Params,
 	if err != nil {
 		return http.StatusBadRequest, "invalid JSON data"
 	}
-	g.AddEntry(passengerEntry.EZLinkID, passengerEntry.BusID,
-		passengerEntry.OriginBusStopID, passengerEntry.DestinationBusStopID)
+	g.AddEntry(passengerEntry.EZLinkID, passengerEntry.BusName,
+		passengerEntry.OriginBusStopName, passengerEntry.DestinationBusStopName)
 
 	return http.StatusOK, "Submitted"
 }

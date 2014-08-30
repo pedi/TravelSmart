@@ -2,6 +2,7 @@ package main
 
 import (
 	"./passenger"
+	"./smrt"
 	"./webService"
 	"fmt"
 	"github.com/go-martini/martini"
@@ -26,7 +27,9 @@ func deleteExpiredPassenger(g *passenger.Passenger) {
 func main() {
 	martiniClassic := martini.Classic()
 	sPassenger := passenger.NewPassenger()
+	sSMRT := smrt.NewSMRT(sPassenger)
 	go deleteExpiredPassenger(sPassenger)
 	webService.RegisterWebService(sPassenger, martiniClassic)
+	webService.RegisterWebService(sSMRT, martiniClassic)
 	martiniClassic.Run()
 }
