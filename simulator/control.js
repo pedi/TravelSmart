@@ -76,7 +76,7 @@ function init() {
         var destinationSelect = document.getElementById("destination_select");
         var selectedDestinationStopName = destinationSelect.options[destinationSelect.selectedIndex].value;
 
-        var EZLinkID = parseInt(Math.random() * 100);
+        var EZLinkID = document.getElementById("book_ezlinkID").value;
 
         var busLinesSelect = document.getElementById("bus_lines_select");
         var selectedBus = busLinesSelect.options[busLinesSelect.selectedIndex].value;
@@ -86,11 +86,24 @@ function init() {
                 type : "POST",
                 url : "http://172.23.60.92:3000/passenger",
                 data :  JSON.stringify({
-                    "EZLinkID": EZLinkID,
+                    "EZLinkID": +EZLinkID,
                     "busName": selectedBus,
                     "originBusStopName": selectedOriginStopName,
                     "destinationBusStopName": selectedDestinationStopName
                 }),
+                success : function(data) {
+                    console.log (data);
+                }
+            });
+    };
+
+    // onboard button
+    document.getElementById("onboard_btn").onclick = function(e) {
+        var ezlinkID = document.getElementById("onboard_ezlinkID").value;
+        jQuery.ajax(
+            {
+                type : "DELETE",
+                url : "http://172.23.60.92:3000/passenger/" + ezlinkID,
                 success : function(data) {
                     console.log (data);
                 }

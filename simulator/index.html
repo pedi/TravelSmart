@@ -6,6 +6,8 @@
 </head>
 <body>
     <h1>Passenger Booking</h1>
+    <label for="book_ezlinkID">Ezlink ID</label>
+    <input type="text" id="book_ezlinkID"/>
     <div id="origin_destination_selects">
         <label for="origin_select">From</label>
         <select id="origin_select">
@@ -22,6 +24,7 @@
         </select>
     </div>
     <div id="bus_lines_select_span">
+
         <label for="bus_lines_select">Bus</label>
         <select id="bus_lines_select">
             <option value="74">74</option>
@@ -38,6 +41,10 @@
         </select>
         <button id="book_bus_btn">Book</button>
     </div>
+
+    <h1>Passenger Onboard</h1>
+    <input type="text" placeholder="EZ Link ID" id="onboard_ezlinkID"/>
+    <button id="onboard_btn">Onboard</button>
 
     <h1>Bus Simulator</h1>
     <div id="bus_simulator_div">
