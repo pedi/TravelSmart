@@ -1,8 +1,14 @@
 package com.travelsmart.app;
 
 import android.app.ExpandableListActivity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,12 +18,17 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.SearchView;
 
+import org.json.JSONException;
+
 
 public class MainActivity extends ExpandableListActivity {
 
     private SearchView mSearchView;
     private ExpandableListView mExpandableList;
     private ExpandableSectionAdapter mExpandableListAdapter;
+    public Location currentLocation;
+    public BusRouteFinder finder;
+    final Handler mHandler = new Handler();
 
     private final String TAG = "DEBUG";
     final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
@@ -35,11 +46,28 @@ public class MainActivity extends ExpandableListActivity {
         }
     };
 
+    private BroadcastReceiver mLocationUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final Location location = intent.getParcelableExtra(MyLocationService.NOTIF_LOCATION_KEY);
+            MainActivity.this.currentLocation = location;
+            double[] pair = {location.getLatitude(), location.getLongitude()};
+            try {
+                MainActivity.this.finder = new BusRouteFinder(pair);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setUpdateExpandableView();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mLocationUpdateReceiver,
+                new IntentFilter(MyLocationService.NOTIF_LOCATION_UPDATED));
+
         for (int i = 0; i < 3; i ++){
             mExpandableList.expandGroup(i, true);
         }

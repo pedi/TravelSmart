@@ -14,7 +14,6 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -29,7 +28,7 @@ public class BusRouteFinder {
     private double originLatitude;
     private double originLongitude;
 
-    private int radius = 20;
+    private int radius = 2000;
     public int getRadius() {return radius;}
     public void setRadius(int newRadius) {radius = newRadius;}
 
