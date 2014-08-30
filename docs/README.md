@@ -21,4 +21,17 @@
   - intenting stop
 
 ## Android
+POST :
+    path :  /reserveBus
+    requestBody : {
+        ## using EZlink card ID as identifier
+        commuterID : %ID%,     
+        origin : %busID%,
+        destination : %busID%,
+        timestamp : %timestamp%,
+        possibleBusRoutes : [ %busNo%, %busNo%, etc]
+    }
+    expected response : {
+        status : [success or fail]
+    }
 
