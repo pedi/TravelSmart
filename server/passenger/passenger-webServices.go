@@ -24,7 +24,7 @@ func (g *Passenger) WebDelete(params martini.Params) (int, string) {
 		return http.StatusBadRequest, "invalid entry id"
 	}
 
-	err = g.RemoveEntry(id)
+	err = g.RemoveEntryByEZLinkID(id)
 	if err != nil {
 		return http.StatusNotFound, "entry not found"
 	}
@@ -47,7 +47,7 @@ func (g *Passenger) WebGet(params martini.Params) (int, string) {
 		return http.StatusBadRequest, "invalid entry id"
 	}
 
-	entry, err := g.GetEntry(id)
+	entry, err := g.GetEntryByEZLinkID(id)
 	if err != nil {
 		return http.StatusNotFound, "entry not found"
 	}
@@ -76,8 +76,8 @@ func (g *Passenger) WebPost(params martini.Params,
 	if err != nil {
 		return http.StatusBadRequest, "invalid JSON data"
 	}
-	g.AddEntry(passengerEntry.BusID, passengerEntry.OriginBusStopID,
-		passengerEntry.DestinationBusStopID)
+	g.AddEntry(passengerEntry.EZLinkID, passengerEntry.BusName,
+		passengerEntry.OriginBusStopName, passengerEntry.DestinationBusStopName)
 
-	return http.StatusOK, "new entry created"
+	return http.StatusOK, "Submitted"
 }

@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+
+# Used by fswatch. For each of the given changed file, it would compile using
+# corresponding compiler into the correct path.
+#
+# Run command: fs [path_to_monitor] | ./compile
+# 
+# For example, if a file called `index.html.slim` was changed, then it would be
+# compiled into `index.html` file, using slimrb compiler
+
+
+while fileFullPath = gets do
+  fileFullPath.chomp!
+  puts "Got input path: #{fileFullPath}"
+
+  if fileFullPath.end_with? ".slim" then
+    # Complile with the slimrb
+    compiledFullPath = fileFullPath[0..-6]
+
+    cmd = "slimrb #{fileFullPath} #{compiledFullPath}"
+    puts `#{cmd}`
+  elsif fileFullPath.end_with? ".coffee" then
+    compiledFullPath = fileFullPath[0..-8]
+    cmd = "coffee -cp #{fileFullPath} > #{compiledFullPath}"
+    puts `#{cmd}`
+  end
+end
+
