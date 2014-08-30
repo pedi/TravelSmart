@@ -10,12 +10,12 @@
         android:layout_weight="2.5"
         android:orientation="vertical"
         android:layout_width="wrap_content">
-        <Button
-            android:id="@+id/button1"
+        <TextView
+            android:id="@+id/bus1"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
             android:text="195"/>
-        <Button
+        <TextView
             android:id="@+id/sub1"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
@@ -27,12 +27,12 @@
         android:layout_weight="2.5"
         android:orientation="vertical"
         android:layout_width="wrap_content">
-        <Button
-            android:id="@+id/button2"
+        <TextView
+            android:id="@+id/bus2"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
             android:text="195"/>
-        <Button
+        <TextView
             android:id="@+id/sub2"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
@@ -44,12 +44,12 @@
         android:layout_weight="2.5"
         android:orientation="vertical"
         android:layout_width="wrap_content">
-        <Button
-            android:id="@+id/button3"
+        <TextView
+            android:id="@+id/bus3"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
             android:text="195"/>
-        <Button
+        <TextView
             android:id="@+id/sub3"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
