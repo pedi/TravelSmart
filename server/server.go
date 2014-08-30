@@ -2,9 +2,11 @@ package main
 
 import (
 	"./passenger"
+	"./smrt"
 	"./webService"
 	"fmt"
 	"github.com/go-martini/martini"
+	"github.com/martini-contrib/cors"
 	"time"
 )
 
@@ -25,8 +27,18 @@ func deleteExpiredPassenger(g *passenger.Passenger) {
 }
 func main() {
 	martiniClassic := martini.Classic()
+	martiniClassic.Use(cors.Allow(&cors.Options{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"POST", "GET", "OPTIONS", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Origin"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
+
 	sPassenger := passenger.NewPassenger()
+	sSMRT := smrt.NewSMRT(sPassenger)
 	go deleteExpiredPassenger(sPassenger)
 	webService.RegisterWebService(sPassenger, martiniClassic)
+	webService.RegisterWebService(sSMRT, martiniClassic)
 	martiniClassic.Run()
 }

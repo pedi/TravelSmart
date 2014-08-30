@@ -7,11 +7,11 @@ import (
 )
 
 type PassengerEntry struct {
-	EZLinkID             int   `json:"EZLinkID"`
-	BusID                []int `json:"BusID"`
-	OriginBusStopID      int   `json:"OriginBusStopID"`
-	DestinationBusStopID int   `json:"DestinationBusStopID"`
-	CreatedTime          time.Time
+	EZLinkID               int    `json:"EZLinkID"`
+	BusName                string `json:"BusName"`
+	OriginBusStopName      string `json:"OriginBusStopName"`
+	DestinationBusStopName string `json:"DestinationBusStopName"`
+	CreatedTime            time.Time
 }
 
 type Passenger struct {
@@ -28,7 +28,7 @@ func NewPassenger() *Passenger {
 	}
 }
 
-func (g *Passenger) AddEntry(EZLinkID int, busID []int, originBusStopID int, destinationBusStopID int) {
+func (g *Passenger) AddEntry(EZLinkID int, busName string, originBusStopName string, destinationBusStopName string) {
 	g.mutex.Lock()
 	defer g.mutex.Unlock()
 	var _, find = g.EZLink2ID[EZLinkID]
@@ -36,16 +36,16 @@ func (g *Passenger) AddEntry(EZLinkID int, busID []int, originBusStopID int, des
 	if find {
 		var id = g.EZLink2ID[EZLinkID]
 		if g.PassengerPool[id] != nil {
-			g.PassengerPool[id].BusID = busID
-			g.PassengerPool[id].OriginBusStopID = originBusStopID
-			g.PassengerPool[id].DestinationBusStopID = destinationBusStopID
+			g.PassengerPool[id].BusName = busName
+			g.PassengerPool[id].OriginBusStopName = originBusStopName
+			g.PassengerPool[id].DestinationBusStopName = destinationBusStopName
 			g.PassengerPool[id].CreatedTime = time.Now()
 		} else {
 			g.PassengerPool[id] = &PassengerEntry{
 				EZLinkID,
-				busID,
-				originBusStopID,
-				destinationBusStopID,
+				busName,
+				originBusStopName,
+				destinationBusStopName,
 				time.Now(),
 			}
 		}
@@ -53,9 +53,9 @@ func (g *Passenger) AddEntry(EZLinkID int, busID []int, originBusStopID int, des
 	} else {
 		newEntry := &PassengerEntry{
 			EZLinkID,
-			busID,
-			originBusStopID,
-			destinationBusStopID,
+			busName,
+			originBusStopName,
+			destinationBusStopName,
 			time.Now(),
 		}
 

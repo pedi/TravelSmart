@@ -3,5 +3,10 @@
 
     <string name="app_name">TravelSmart</string>
     <string name="hello_world">Hello world!</string>
+    <string name="search">Search text!</string>
 
+    <color name="white">#FFFFFF</color>
+    <color name="blue">#86CBD7</color>
+    <color name="green">#8BCC6F</color>
+    <color name="black">#000000</color>
 </resources>
