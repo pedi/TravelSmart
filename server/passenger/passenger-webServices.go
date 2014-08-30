@@ -2,11 +2,10 @@ package passenger
 
 import (
 	"encoding/json"
+	"github.com/go-martini/martini"
 	"io/ioutil"
 	"net/http"
 	"strconv"
-
-	"github.com/go-martini/martini"
 )
 
 func (g *Passenger) GetPath() string {
@@ -15,7 +14,6 @@ func (g *Passenger) GetPath() string {
 
 func (g *Passenger) WebDelete(params martini.Params) (int, string) {
 	if len(params) == 0 {
-		// No params. Remove all entries from collection.
 		g.RemoveAllEntries()
 
 		return http.StatusOK, "collection deleted"
@@ -64,7 +62,6 @@ func (g *Passenger) WebGet(params martini.Params) (int, string) {
 func (g *Passenger) WebPost(params martini.Params,
 	req *http.Request) (int, string) {
 	defer req.Body.Close()
-
 	requestBody, err := ioutil.ReadAll(req.Body)
 	if err != nil {
 		return http.StatusInternalServerError, "internal error"
@@ -79,9 +76,8 @@ func (g *Passenger) WebPost(params martini.Params,
 	if err != nil {
 		return http.StatusBadRequest, "invalid JSON data"
 	}
-
-	g.AddEntry(passengerEntry.busID, passengerEntry.originBusStopID,
-		passengerEntry.destinationBusStopID)
+	g.AddEntry(passengerEntry.BusID, passengerEntry.OriginBusStopID,
+		passengerEntry.DestinationBusStopID)
 
 	return http.StatusOK, "new entry created"
 }

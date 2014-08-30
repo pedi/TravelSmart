@@ -2,7 +2,7 @@ package main
 
 import (
 	"./passenger"
-	"./smrt"
+	//	"./smrt"
 	"./webService"
 	"github.com/go-martini/martini"
 )
@@ -12,6 +12,6 @@ func main() {
 	sPassenger := passenger.NewPassenger()
 	//sSMRT := smrt.NewSMRT()
 	webService.RegisterWebService(sPassenger, martiniClassic)
-	//webService.RegisterWebService(sPassenger, martiniClassic)
+	//webService.RegisterWebService(sSMRT, martiniClassic)
 	martiniClassic.Run()
 }

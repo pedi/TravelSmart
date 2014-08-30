@@ -7,9 +7,9 @@ import (
 
 type PassengerEntry struct {
 	ID                   int
-	busID                []int
-	originBusStopID      int
-	destinationBusStopID int
+	BusID                []int `json:"BusID"`
+	OriginBusStopID      int   `json:"OriginBusStopID"`
+	DestinationBusStopID int   `json:"DestinationBusStopID"`
 }
 
 type Passenger struct {
