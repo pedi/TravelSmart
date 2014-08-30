@@ -15,9 +15,8 @@
 package webService
 
 import (
+	"github.com/go-martini/martini"
 	"net/http"
-
-	"github.com/codegangsta/martini"
 )
 
 // WebService is the interface that should be implemented by types that want to
