@@ -1,7 +1,6 @@
 package com.travelsmart.app;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -166,7 +165,6 @@ public class ExpandableSectionAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        Log.d("DEEEEEE", "grp " + groupPosition + " " + ((int) Math.ceil(this.dummy[groupPosition].buses.length / 3.0) + 1));
         return (int) Math.ceil(this.dummy[groupPosition].buses.length / 3.0) + 1;
     }
 
@@ -193,7 +191,7 @@ public class ExpandableSectionAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getGroupCount() {
-        return this.dummy.length; // Home + Work + Search Result
+        return this.dummy.length;
     }
 
     @Override
