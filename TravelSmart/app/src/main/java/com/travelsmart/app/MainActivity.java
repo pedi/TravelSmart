@@ -1,17 +1,18 @@
 package com.travelsmart.app;
 
 import android.app.ExpandableListActivity;
-import android.app.SearchManager;
-import android.app.SearchableInfo;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnGroupClickListener;
+import android.widget.ExpandableListView.OnGroupCollapseListener;
+import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.SearchView;
-
-import java.util.List;
 
 
 public class MainActivity extends ExpandableListActivity {
@@ -19,6 +20,7 @@ public class MainActivity extends ExpandableListActivity {
     private SearchView mSearchView;
     private ExpandableListView mExpandableList;
     private ExpandableSectionAdapter mExpandableListAdapter;
+
     private final String TAG = "DEBUG";
     final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
         @Override
@@ -39,6 +41,41 @@ public class MainActivity extends ExpandableListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setUpdateExpandableView();
+    }
+
+    protected void setUpdateExpandableView() {
+        mExpandableList = getExpandableListView();
+        mExpandableList.setDividerHeight(2);
+        mExpandableList.setGroupIndicator(null);
+        mExpandableList.setClickable(true);
+        mExpandableList.setOnGroupClickListener(new OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                return true;
+            }
+        });
+
+        mExpandableListAdapter = new ExpandableSectionAdapter(this);
+
+        mExpandableListAdapter.setInflater((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE), this);
+
+        mExpandableList.setAdapter(mExpandableListAdapter);
+        mExpandableList.setOnChildClickListener(this);
+        mExpandableList.setDividerHeight(2);
+
+        mExpandableList.setOnGroupExpandListener(new OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                ExpandableViewUtil.setExpandedListViewHeightBasedOnChildren(mExpandableList, groupPosition);
+            }
+        });
+        mExpandableList.setOnGroupCollapseListener(new OnGroupCollapseListener() {
+            @Override
+            public void onGroupCollapse(int groupPosition) {
+                ExpandableViewUtil.setCollapseListViewHeightBasedOnChildren(mExpandableList, groupPosition);
+            }
+        });
     }
 
     @Override
@@ -56,28 +93,6 @@ public class MainActivity extends ExpandableListActivity {
 
 
     private void setupSearchView(MenuItem searchItem) {
-
-        if (isAlwaysExpanded()) {
-            mSearchView.setIconifiedByDefault(false);
-        } else {
-            searchItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM
-                    | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
-        }
-
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        if (searchManager != null) {
-            List<SearchableInfo> searchables = searchManager.getSearchablesInGlobalSearch();
-
-            SearchableInfo info = searchManager.getSearchableInfo(getComponentName());
-            for (SearchableInfo inf : searchables) {
-                if (inf.getSuggestAuthority() != null
-                        && inf.getSuggestAuthority().startsWith("applications")) {
-                    info = inf;
-                }
-            }
-            mSearchView.setSearchableInfo(info);
-        }
-
         mSearchView.setOnQueryTextListener(queryTextListener);
     }
 
