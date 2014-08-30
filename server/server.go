@@ -29,6 +29,7 @@ func main() {
 	martiniClassic := martini.Classic()
 	martiniClassic.Use(cors.Allow(&cors.Options{
 		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"POST", "GET", "OPTIONS", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Origin"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
