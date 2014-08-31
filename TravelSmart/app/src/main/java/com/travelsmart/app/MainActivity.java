@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
@@ -52,11 +53,19 @@ public class MainActivity extends ExpandableListActivity {
             final Location location = intent.getParcelableExtra(MyLocationService.NOTIF_LOCATION_KEY);
             MainActivity.this.currentLocation = location;
             double[] pair = {location.getLatitude(), location.getLongitude()};
-            try {
-                MainActivity.this.finder = new BusRouteFinder(pair);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+
+            new AsyncTask<double[], Void, Void>() {
+                @Override
+                protected Void doInBackground(double[]... pair) {
+                    try {
+                        MainActivity.this.finder = new BusRouteFinder(pair[0]);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+            }.execute(pair);
+
         }
     };
 
