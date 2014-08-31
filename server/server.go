@@ -20,7 +20,7 @@ func deleteExpiredPassenger(g *passenger.Passenger) {
 			}
 			fmt.Printf("%v %v\n", index, time.Since(p.CreatedTime))
 			if time.Since(p.CreatedTime) >= 60*time.Minute {
-				g.RemoveEntryByID(index)
+				//g.RemoveEntryByID(index)
 			}
 		}
 	}

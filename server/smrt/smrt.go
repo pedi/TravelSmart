@@ -72,8 +72,8 @@ func (g *SMRT) ProcessReq(req SMRTReq) SMRTResp {
 		}
 		for i := findIdx; i < len(g.route.stations); i++ {
 			for j := 0; j < len(g.PassengerObj.PassengerPool); j++ {
-				if g.route.order[g.PassengerObj.PassengerPool[j].OriginBusStopName] >= g.route.order[req.OriginBusStopName] &&
-					g.route.order[g.PassengerObj.PassengerPool[j].DestinationBusStopName] <= g.route.order[req.DestinationBusStopName] {
+				if g.route.order[g.PassengerObj.PassengerPool[j].OriginBusStopName] <= g.route.order[g.route.stations[i].Name] &&
+					g.route.order[g.PassengerObj.PassengerPool[j].DestinationBusStopName] >= g.route.order[g.route.stations[i].Name] {
 					g.route.stations[i].BusName2Count[g.PassengerObj.PassengerPool[j].BusName]++
 				}
 			}
