@@ -82,9 +82,7 @@
   dust.helpers.loopObj = (chk,ctx,bdi,params) ->
     return if(!params.obj)
     return chk.write(params.obj) if(typeof params.obj != "object")
-    console.log("rendering, got: ",params)
     for k,v of params.obj
-      console.log('rendering: ',k)
       chk.render(bdi.block,ctx.push({key:k,value:v}))
     chk
 
@@ -98,23 +96,48 @@
       dust.loadSource(dust.compile(viewInfo.tmpl, viewInfo.name))
 
   bar = new Bar()
-  bar.register($.get, API('setup'),((data)->(data)),'json')
+  bar.register($.get, API('setup'),((data)->data),'json')
   bar.register(viewBar.start, compileViews)
 
+  # Save this bus info into CONFIG
+  CONFIG = {bus_cap:40}
   bar.start (configData)->
-    console.log "All Done :)"
-    console.log("Passed in data: ",configData)
+    CONFIG['bus_info'] = configData['buses']
+    CONFIG['stop_info'] = configData['bus_stops']
+    CONFIG['stop_text'] = Object.keys(CONFIG['stop_info'])
 
-    # Load Template
-    dust.render("bus_info",configData,(err,dta) ->
-      console.log "Err:",err
-      console.log "Data: ",dta
+    # Build the bus info, for showing
+    dataToShow = {}
+    buses = []
+    for bus_number, stops of CONFIG['bus_info']
+      stops_to_show = []
+      for stop_idx in stops
+        stops_to_show.push
+          name:CONFIG['stop_text'][stop_idx]
+          stop_id:stop_idx
+          bus_number:bus_number
+
+      buses.push
+        number: bus_number
+        stops: stops_to_show
+        cap: CONFIG['bus_cap']
+
+    dataToShow['buses'] = buses
+
+    # Convert config data into show data
+    dust.render("bus_info",dataToShow,(err,dta) ->
+      $('#bus-info').html(dta)
     )
 
-  # Get current bus info
+  # Generate a fake data of the # of passagers
+  data_generator = () ->
+    # 1. # of people at a certain stop
+    # 2. 
 
 
-  # Show this config info
+
+  # Show this bus info
+  
 
   # Recurring task
   recurring_task = () ->

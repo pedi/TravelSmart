@@ -2,3 +2,32 @@ canvas{
   width: 100%;
   height: 100%;
 }
+
+.bus-stop{
+  display: inline-block;
+  margin: 10px;
+}
+
+.stop-link{
+  display: inline-block;
+}
+
+.cap{
+  color: blue;
+}
+
+.now{
+  color: red;
+}
+
+.content .left{
+  vertical-align: top;
+  display: inline-block;
+  width: 70%;
+}
+
+.content .right{
+  display: inline-block;
+  width: 25%;
+  vertical-align: top;
+}

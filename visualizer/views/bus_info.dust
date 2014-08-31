@@ -1,6 +1,30 @@
-<p>This is the result</p>
-{@loopObj obj=buses}
-  <p>{.name}</p>
+<!-- Structure:
+buses [
+  number
+  stops [
+    name
+    id
+  ]
+]
+  
+-->
+<p>List of Bus Stops</p>
+{#.buses}
   <div>
+    {.number} (<span class='people_num cap'>{.cap}</span>) :
+
+    {#.stops}
+      <div class='bus-stop'>
+        {.name}
+        (<span class='people_num' stop_id={.stop_id}
+        bus_number={.bus_number}>0</span>)
+      </div>
+      <div class='stop-link'>
+        &gt;&gt;
+          <span class='people_num now'>5</span>
+        ) &gt;&gt; 
+      </div>
+    {/.stops}
   </div>
-{/loopObj}
+{/.buses}
+
