@@ -1,6 +1,20 @@
+doctype html
 html
+  meta(http-equiv="content-type" content="text/html; charset=UTF8")
   head
     title Visualizer
+    script(src='lib/three.min.js')
+    script(src='lib/jquery-2.1.1.js')
+    script(src='lib/dust/dust.js')
+    script(src='lib/dust/parser.js')
+    script(src='lib/dust/compiler.js')
+
+
+    link(rel='stylesheet' type='text/css' href='lib/main.css')
   body
     h1 Visualizer
+    script.dust-template(name='intro' type='text/template')
+      p Hello {name}! This is YY :)
     p This is the visualizer ;)
+
+    script(src='lib/main.js')

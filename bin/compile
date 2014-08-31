@@ -17,7 +17,7 @@ while fileFullPath = gets do
     # Complile with the slimrb
     compiledFullPath = fileFullPath[0..-6]
 
-    cmd = "slimrb #{fileFullPath} #{compiledFullPath}"
+    cmd = "slimrb -p #{fileFullPath} #{compiledFullPath}"
     puts `#{cmd}`
   elsif fileFullPath.end_with? ".coffee" then
     compiledFullPath = fileFullPath[0..-8]
