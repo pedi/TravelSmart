@@ -1,0 +1,6 @@
+<p>This is the result</p>
+{@loopObj obj=buses}
+  <p>{.name}</p>
+  <div>
+  </div>
+{/loopObj}

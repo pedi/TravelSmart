@@ -48,57 +48,70 @@
         that.callCallback() if that.bar.allDone()
       else
         that.func that.args...
+
     this
 
-  class Bar
-    constructor: () ->
-      @checkings = []
+  Bar = () ->
+    that = this
+    this.checkings = []
 
-    allDone: ()->
-      for ele in @checkings
+    this.allDone = ()->
+      for ele in that.checkings
         return false unless ele.called
       true
     
-    setCallback: (@callback) ->
-    callCallback: ()->
-      results = callable.result for callable in @checkings
-      @callback.call(results...)
+    this.callCallback = ()->
+      results = (callable.result for callable in that.checkings)
+      that.callback results...
 
-    register: (func) ->
+    this.register = (func) ->
       # find the func in the args, and append the checking logic
       args = [].slice.call(arguments,1)
-      @checkings.push(new Callable(func,args,@))
+      that.checkings.push(new Callable(func,args,that))
 
-    start: ()->
-      for callable in @checkings
+    this.start = (callback)->
+      console.log('starting with callback: ', callback)
+      that.callback = callback
+      for callable in that.checkings
         callable.call()
+
+    this
   
+  # define a Helper to loop through object like an array                            
+  # Expecting param to have element obj                                             
+  dust.helpers.loopObj = (chk,ctx,bdi,params) ->
+    return if(!params.obj)
+    return chk.write(params.obj) if(typeof params.obj != "object")
+    console.log("rendering, got: ",params)
+    for k,v of params.obj
+      console.log('rendering: ',k)
+      chk.render(bdi.block,ctx.push({key:k,value:v}))
+    chk
 
-  # Load template, for realtime use only
-  loadTemplate = () ->
-    $('script.dust-template').each (idx,ele) ->
-      $ele = $(ele)
-      name = $ele.attr('name')
+  viewBar = new Bar()
+  registerView = (name) ->
+    viewBar.register($.get, "views/#{name}.dust",(tmpl)->{name:name, tmpl:tmpl})
+  registerView "bus_info"
 
-      dust.loadSource(dust.compile($ele.html(),name))
-
+  compileViews = () ->
+    for viewInfo in arguments
+      dust.loadSource(dust.compile(viewInfo.tmpl, viewInfo.name))
 
   bar = new Bar()
   bar.register($.get, API('setup'),((data)->(data)),'json')
-  bar.register(loadTemplate)
+  bar.register(viewBar.start, compileViews)
 
-  bar.setCallback (configData)->
+  bar.start (configData)->
     console.log "All Done :)"
+    console.log("Passed in data: ",configData)
 
-  # Load Template
-    dust.render("intro",{name:'songyy'},(err,dta) ->
-      console.log dta
+    # Load Template
+    dust.render("bus_info",configData,(err,dta) ->
+      console.log "Err:",err
+      console.log "Data: ",dta
     )
 
-  bar.start()
-
   # Get current bus info
-
 
 
   # Show this config info
