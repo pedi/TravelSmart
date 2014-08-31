@@ -1,6 +1,8 @@
 package com.travelsmart.app;
 
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -28,11 +30,12 @@ public class BusRouteFinder {
     private double originLatitude;
     private double originLongitude;
 
-    private int radius = 2000;
+    private int radius = 200;
     public int getRadius() {return radius;}
     public void setRadius(int newRadius) {radius = newRadius;}
 
     BusRouteFinder(double[] origin) throws JSONException {
+
         mapOriginToNearestBusStopLocation(origin);
     }
 
@@ -45,6 +48,60 @@ public class BusRouteFinder {
                 .appendQueryParameter("types", "bus_station")
                 .appendQueryParameter("key", API_KEY);
         return builder.build().toString();
+    }
+
+    public interface OnAsyncGetCompletd {
+        void OnAsyncGetCompletd(JSONObject response);
+    }
+    private class AsyncGet extends AsyncTask<String, Void, JSONObject> {
+
+        private OnAsyncGetCompletd listener;
+
+        public AsyncGet(OnAsyncGetCompletd listener){
+            this.listener=listener;
+        }
+
+
+        @Override
+        protected JSONObject doInBackground(String... query) {
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpResponse response = null;
+            try {
+                response = httpclient.execute(new HttpGet(query[0]));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            StatusLine statusLine = response.getStatusLine();
+            if(statusLine.getStatusCode() == HttpStatus.SC_OK){
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                try {
+                    response.getEntity().writeTo(out);
+                    String responseString = out.toString();
+                    out.close();
+                    // convert response string to json object
+                    return new JSONObject(responseString);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            } else{
+                //Closes the connection.
+                try {
+                    response.getEntity().getContent().close();
+                    throw new IOException(statusLine.getReasonPhrase());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            return null;
+        }
+
+        protected void onPostExecute(JSONObject response) {
+            listener.OnAsyncGetCompletd(response);
+        }
     }
 
     private JSONObject httpGet(String query) throws IOException, JSONException {
@@ -99,11 +156,37 @@ public class BusRouteFinder {
 
     private void mapOriginToNearestBusStopLocation(double[] origin) throws JSONException {
         String queryURI = buildNearestBusStopURI(origin);
+
+
+//        originLatitude = origin[0];
+//        originLongitude = origin[1];
+//        new AsyncGet(new OnAsyncGetCompletd() {
+//            @Override
+//            public void OnAsyncGetCompletd(JSONObject response) {
+//                double[] nearestStop = new double[0];
+//                double[] origin = {originLatitude, originLongitude};
+//                try {
+//                    nearestStop = findNearestBusStop(response.getJSONArray("results"), origin);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                originLatitude = nearestStop[0];
+//                originLongitude = nearestStop[1];
+//                Log.d("nearest", originLatitude + " " + originLongitude);
+//
+//            }
+//        }).execute(queryURI);
+
+
         try {
+
             JSONObject response = httpGet(queryURI);
             double[] nearestStop = findNearestBusStop(response.getJSONArray("results"), origin);
+
             originLatitude = nearestStop[0];
             originLongitude = nearestStop[1];
+            Log.d("here", originLatitude + "," + originLongitude);
 
         } catch (IOException e) {
             e.printStackTrace();

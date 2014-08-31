@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Bus Traffic Visualization</title>
+    <link rel="stylesheet" type="text/css" href="visual.css"/>
+</head>
+<body onload="init();">
+    <select id="bus_line_select">
+        <option value="74">74</option>
+        <option value="91">91</option>
+        <option value="92">92</option>
+        <option value="95">95</option>
+        <option value="191">191</option>
+        <option value="196">196</option>
+        <option value="198">198</option>
+        <option value="200">200</option>
+        <option value="14">14</option>
+        <option value="33">33</option>
+        <option value="166">166</option>
+    </select>
+    <button id="select_btn">SELECT</button>
+
+    <canvas width="1200" height="600" id="bus_visualization"></canvas>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="model.js"></script>
+    <script type="text/javascript" src="render.js"></script>
+    <script type="text/javascript" src="main.js"></script>
+</body>
+</html>

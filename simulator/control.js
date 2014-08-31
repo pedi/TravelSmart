@@ -84,7 +84,7 @@ function init() {
         jQuery.ajax(
             {
                 type : "POST",
-                url : "http://172.23.60.92:3000/passenger",
+                url : "http://localhost:3000/passenger",
                 data :  JSON.stringify({
                     "EZLinkID": +EZLinkID,
                     "busName": selectedBus,
