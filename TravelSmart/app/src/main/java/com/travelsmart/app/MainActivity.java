@@ -1,8 +1,10 @@
 package com.travelsmart.app;
 
+import android.app.AlertDialog;
 import android.app.ExpandableListActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
@@ -18,8 +20,11 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import org.json.JSONException;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends ExpandableListActivity {
@@ -41,8 +46,39 @@ public class MainActivity extends ExpandableListActivity {
         }
 
         @Override
-        public boolean onQueryTextSubmit(String query) {
+        public boolean onQueryTextSubmit(final String query) {
             Log.d(TAG, "Submitted = " + query);
+            if (MainActivity.this.finder == null) {
+                Log.d(TAG, "finder is null");
+            }
+            if (MainActivity.this.finder != null) {
+                mHandler.post( new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            ArrayList<String> stops = MainActivity.this.finder.getPossibleBusStops(query);
+                            if (stops != null && stops.size() > 0) {
+                                ArrayList<String> lines = MainActivity.this.finder.getPossibleBusLines(stops.get(0));
+                                if (lines != null && lines.size() > 0){
+
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                    builder.setTitle("Pick a Bus");
+                                    builder.setItems((CharSequence[])lines.toArray(), new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // the user clicked on colors[which]
+                                        }
+                                    });
+                                    builder.show();
+
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
             return false;
         }
     };
@@ -56,9 +92,15 @@ public class MainActivity extends ExpandableListActivity {
 
             new AsyncTask<double[], Void, Void>() {
                 @Override
-                protected Void doInBackground(double[]... pair) {
+                protected Void doInBackground(double[]... pairOfPoints) {
                     try {
-                        MainActivity.this.finder = new BusRouteFinder(pair[0]);
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(MainActivity.this, "Location Update", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        MainActivity.this.finder = new BusRouteFinder(pairOfPoints[0]);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
